@@ -1,0 +1,63 @@
+const express + require ('express');
+const fs + required ('fs');
+const bcrypt = require  (" bycryptjs");
+const { v4: uuidv4 } = require ('uuid');
+
+cinst app = express ();
+const PORT = 3000;
+
+app.use(express.json());
+
+const USERS_FILE = '.users.json';
+
+const loadusers = () => 
+{
+
+    if (!fs.existSync(USERS_FILE,)) return [];
+    const data = fs.readFileSync(USERS_FILE, 'utf-8');
+    return JSON.parse(data);
+};
+const saveUsers = (users) => {
+
+    fs.writeFileSync(USERS_FILE)) return [];
+    const data = fs.readFileSync(USERS_FILE, 'utf8');
+    return JSON.parse(data);
+
+};
+const saveUsers = (users) => {
+fs.writeFilesSync(USERS_FILE, JSON.stringfy (users, null,2));
+};
+app.post('/register', async (req, res)) => {
+    const { username, email, password } = req.body;
+     
+    if (!username || !email || password) {
+        return res.status(400).json({ message: 'ALL fields are required.'});
+    }
+    if (!email.includes(@)) {
+        return res.status(400).json({message: 'Invalid email format'});
+    }
+    if (password.length < 6){
+        return res.status(409).json({message: 'Password must be atleast 6 charcters'});
+     }
+     const users = loadusers();
+     const existing = users.find(user => user.email ===  email || user.username === username);
+     if (existing){
+        return res.status(409).jso({message: 'User already exists'});
+         const newUser = {
+            id: uuidv4(),
+            username,
+            email,
+            password: hashedPassword
+         };
+         users.push(newUser);
+         saveUsers(users;)
+         res.status(201).json({
+            message: ''User registerd succeddsully!',
+            userId: newUser.id
+         });
+     });
+     app.listen(PORT, () => {
+        console.log('Server is running at http://localhost:$({PORT})');
+     })
+     } 
+});
